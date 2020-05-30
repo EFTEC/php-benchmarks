@@ -11,9 +11,9 @@ echo "<p>It tests the performance of hash</p>";
 
 
 $data = "";
-for($i = 0; $i < 1500; $i++)
+for($i = 0; $i < 1500; $i++) {
     $data .= sha1("H:k - $i - k:H");
-
+}
 
 $res = [];
 

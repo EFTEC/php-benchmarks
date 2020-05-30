@@ -33,7 +33,7 @@ function noReference($array) {
 
 
 
-## Bechmark 2 Hash speed (short time is better)
+## Bechmark 2 Hash speed
 
 We test the benchmark of the generation of hash.
 
@@ -42,6 +42,10 @@ We test the benchmark of the generation of hash.
 HEX means that the result is resulted in HEXADECIMAL.  
 
 RAW means the result is binary. Sometimes HEX=RAW.  
+
+
+
+### Result (short time is better)
 
 
 
@@ -151,3 +155,58 @@ RAW means the result is binary. Sometimes HEX=RAW.
 | RAW    | snefru      | 32     | 197.18909263611 |
 | RAW    | md2         | 16     | 830.39283752441 |
 | HEX    | md2         | 32     | 838.06991577148 |
+
+
+
+## JSON vs Serialize
+
+It benchmark to serialize and de-serialize variables
+
+[json_vs_serialize.php](json_vs_serialize.php)
+
+array
+
+```php
+$data=['field1'=>"hello",'field2'=>450,'field3'=>['field4'=>'hello','field5'=>450]];
+```
+
+object StdClass
+
+```php
+$data=new stdClass();
+$data->field1="hello";
+$data->field2=450;
+$data->field3=new stdClass();
+$data->field3->field4="hello";
+$data->field3->field5=450;
+```
+
+object (defined by a class)
+
+```php
+$data=new MyClass();
+$data->field1="hello";
+$data->field2=450;
+$data->field3=new MyClass2();
+$data->field3->field4="hello";
+$data->field3->field5=450;
+```
+
+
+
+### Result (less is better)
+
+| type                        | time                         |
+| :-------------------------- | :--------------------------- |
+| json_encode array           | 23.508071899414              |
+| serialize array             | **20.003318786621** (better) |
+| json_decode array           | 120.9020614624               |
+| unserialize array           | 39.196014404297              |
+| json_encode object stdclass | 24.199485778809              |
+| serialize object stdclass   | 32.901763916016              |
+| json_decode object stdclass | 127.10094451904              |
+| unserialize object stdclass | 102.61535644531              |
+| json_encode object          | 24.39022064209               |
+| serialize object            | 32.877922058105              |
+| json_decode object          | 126.21879577637              |
+| unserialize object          | **129.1036605835** (worst)   |
