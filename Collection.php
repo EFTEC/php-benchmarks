@@ -1,5 +1,7 @@
 <?php /** @noinspection DuplicatedCode */
 
+
+
 namespace mapache_commons;
 
 /**

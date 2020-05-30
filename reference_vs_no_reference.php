@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @copyright Jorge Castro Castillo MIT License https://www.eftec.cl
+ * @version 1.1           
+ */
+
 include 'Collection.php';
 
 echo "<h1>Reference vs No Reference</h1>";
