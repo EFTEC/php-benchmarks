@@ -210,3 +210,23 @@ $data->field3->field5=450;
 | serialize object            | 32.877922058105              |
 | json_decode object          | 126.21879577637              |
 | unserialize object          | **129.1036605835** (worst)   |
+
+
+
+## DEFINE / CONST / ENV
+
+We test the performance between to read an environment variable or to use a constant.
+
+
+
+Result (less is better)
+
+| DEFINE CONST        | CONST               | getEnv()          | function            |
+| :------------------ | :------------------ | :---------------- | ------------------- |
+| 0.00066995620727539 | 0.00067687034606934 | 0.056761026382446 | 0.00053286552429199 |
+
+Conclusion, **define()** and **const** have practically the same performance (at least in PHP 7.4), while **getEnv()** is considerably bad.  However,getEnv() is acceptable even when it is 10000% slower (50000 getEnv() took 50ms.).
+
+We also tested to call a function and it is way fast than getEnv()
+
+> Conclusion: getEnv() is not cached neither it is loaded into PHP. Instead, it is calculated each time when it is called.
