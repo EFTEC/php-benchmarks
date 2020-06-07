@@ -3,7 +3,19 @@ It is a collection of PHP benchmarks
 
 It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea)
 
-[TOC]
+- [PHP benchmarks](#php-benchmarks)
+  * [Benchmark 1, Reference vs No Reference](#benchmark-1--reference-vs-no-reference)
+    + [Result (smaller is better)](#result--smaller-is-better-)
+  * [Bechmark 2 Hash speed](#bechmark-2-hash-speed)
+    + [Result (short time is better)](#result--short-time-is-better-)
+  * [JSON vs Serialize](#json-vs-serialize)
+    + [Result (less is better)](#result--less-is-better-)
+  * [DEFINE / CONST / ENV](#define---const---env)
+    + [Result (less is better)](#result--less-is-better--1)
+  * [array_map vs foreach](#array-map-vs-foreach)
+    + [Result (less is better)](#result--less-is-better--2)
+
+
 
 
 
