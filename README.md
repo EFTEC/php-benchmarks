@@ -219,7 +219,7 @@ We test the performance between to read an environment variable or to use a cons
 
 
 
-Result (less is better)
+### Result (less is better)
 
 | DEFINE CONST        | CONST               | getEnv()          | function            |
 | :------------------ | :------------------ | :---------------- | ------------------- |
@@ -230,3 +230,20 @@ Conclusion, **define()** and **const** have practically the same performance (at
 We also tested to call a function and it is way fast than getEnv()
 
 > Conclusion: getEnv() is not cached neither it is loaded into PHP. Instead, it is calculated each time when it is called.
+
+
+
+## array_map vs foreach
+
+[benchmark_arraymap_foreach.php](benchmark_arraymap_foreach.php)
+
+The test the performance between **foreach** and **array_map**
+
+### Result (less is better)
+
+| foreach                       | array_map        | array_map (static) | array_map (calling a function) |
+| :---------------------------- | :--------------- | :----------------- | :----------------------------- |
+| **0.10213899612427** (better) | 0.18259811401367 | 0.18230390548706   | 0.17731499671936               |
+
+Conclusion: Foreach is still faster.   Between array_map and array_map (static), there is not a big difference. And using array_map with a function is slightly fast.
+
