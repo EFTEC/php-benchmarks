@@ -3,6 +3,8 @@ It is a collection of PHP benchmarks
 
 It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea)
 
+[TOC]
+
 
 
 ## Benchmark 1, Reference vs No Reference
