@@ -1,7 +1,9 @@
 # PHP benchmarks
-It is a collection of PHP benchmarks
+It is a collection of PHP benchmarks.   Those benchmarks are aimed to be executed in most machines without any special installation or configuration. It only requires a single library (to draw the table) and nothing else much.  It doesn't require composer or any other extra component. Just download (or copy and paste) and run.
 
-It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea)
+
+
+It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea).  
 
 - [PHP benchmarks](#php-benchmarks)
   * [Benchmark 1, Reference vs No Reference](#benchmark-1--reference-vs-no-reference)
@@ -251,7 +253,7 @@ We also tested to call a function and it is way fast than getEnv()
 
 [benchmark_arraymap_foreach.php](benchmark_arraymap_foreach.php)
 
-The test the performance between **foreach** and **array_map**
+It tests the performance between **foreach** and **array_map**
 
 ### Result (less is better)
 
