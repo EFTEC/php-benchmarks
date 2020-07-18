@@ -284,5 +284,41 @@ $r=isset($var) ? $var : null; // issetnull5 php>7.0
 | :--------------------- | :-------------------- | :--------------------- | :-------------------- | :--------------------- | --------------------- |
 | 0.00011086463928222656 | 0.0017931461334228516 | 0.00010204315185546875 | 0.0019218921661376953 | 0.00012803077697753906 | 0.0001201629638671875 |
 
+Smaller is better.
+
 Conclusion: @ is between 1 and 2 order of magnitude slower.
 
+## Type hinting
+
+How type hinting affects the performance?
+
+[benchmark_types_arguments.php](benchmark_types_arguments.php)
+
+Let's say the next code
+
+```php
+/**
+ * @param DummyClass $arg1
+ * @param DummyClass $arg2
+ *
+ * @return DummyClass
+ */
+function php5($arg1,$arg2){
+    return new DummyClass();
+}
+function php7(DummyClass $arg1,DummyClass $arg2): DummyClass {
+    return new DummyClass();
+}
+```
+
+
+
+| php5                  | php7                  |
+| :-------------------- | :-------------------- |
+| 0.0006339550018310547 | 0.0007991790771484375 |
+
+Smaller is better.
+
+**Conclusion**: In general, type hinting is around 10% slower but both methods are enough fast to made any difference.
+
+While it could be useful but if you are using a proper IDE, then you could rely on PHPDoc, it's verbose but it is more complete and without affecting the performance. 
