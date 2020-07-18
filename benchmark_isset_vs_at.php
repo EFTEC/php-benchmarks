@@ -1,5 +1,6 @@
 <?php
 
+
 $numbers = range(0, 1000);
 
 include "Collection.php";
