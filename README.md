@@ -263,3 +263,26 @@ It tests the performance between **foreach** and **array_map**
 
 Conclusion: Foreach is still faster.   Between array_map and array_map (static), there is not a big difference. And using array_map with a function is slightly fast.
 
+## isset vs @ at
+
+[benchmark_isset_vs_at.php](benchmark_isset_vs_at.php)
+
+This test could be a bit misleading but the goal is to benchmark the speed even when both ways returns different values.
+
+```php
+$r=isset($var); // isset (it returns true if the variable exists)
+$r=@$var // at
+$r= $var ?? null; // nullcol php >7.0
+$r= @$var ? $exist : null; // ternary
+$r=isset($var) ?? $var; // issetnull7 php>7.0
+$r=isset($var) ? $var : null; // issetnull5 php>7.0
+```
+
+
+
+| isset                  | at                    | nullcol                | ternary               | issetnull7             | issetnull5            |
+| :--------------------- | :-------------------- | :--------------------- | :-------------------- | :--------------------- | --------------------- |
+| 0.00011086463928222656 | 0.0017931461334228516 | 0.00010204315185546875 | 0.0019218921661376953 | 0.00012803077697753906 | 0.0001201629638671875 |
+
+Conclusion: @ is between 1 and 2 order of magnitude slower.
+
