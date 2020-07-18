@@ -27,6 +27,8 @@ function php7(DummyClass $arg1,DummyClass $arg2): DummyClass {
 }
 
 
+
+
 // **********************************************************************************
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
