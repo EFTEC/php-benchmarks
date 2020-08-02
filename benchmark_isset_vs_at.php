@@ -1,5 +1,9 @@
 <?php
+$dummy=30;
 
+//!isset($dummy) && $dummy='ok';
+//var_dump($dummy);
+//die(1);
 
 $numbers = range(0, 1000);
 
@@ -63,5 +67,14 @@ for($i=0;$i<$instances;$i++) {
 }
 $t2=microtime(true);
 $table['issetnull5']=$t2-$t1;
+
+// **********************************************************************************
+$t1=microtime(true);
+for($i=0;$i<$instances;$i++) {
+    !isset($exist) and $exist=true;
+    !isset($noexist) and $noexist=false;
+}
+$t2=microtime(true);
+$table['hacky']=$t2-$t1;
 
 echo \mapache_commons\Collection::generateTable($table);

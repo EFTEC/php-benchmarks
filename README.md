@@ -276,6 +276,7 @@ $r= $var ?? null; // nullcol php >7.0
 $r= @$var ? $exist : null; // ternary
 $r=isset($var) ?? $var; // issetnull7 php>7.0
 $r=isset($var) ? $var : null; // issetnull5 php>7.0
+!isset($var) and $var=true; // hacky but it works (however it doesn't assigns value)
 ```
 
 
@@ -321,4 +322,27 @@ Smaller is better.
 
 **Conclusion**: In general, type hinting is around 10% slower but both methods are enough fast to made any difference.
 
-While it could be useful but if you are using a proper IDE, then you could rely on PHPDoc, it's verbose but it is more complete and without affecting the performance. 
+While it could be useful but if you are using a proper IDE, then you could rely on PHPDoc, it's verbose but it is more complete and without affecting the performance.
+
+
+## Benchmark eval
+
+[benchmark_eval.php](benchmark_eval.php)
+
+```php
+$r=ping("pong"); // no eval
+eval('$r=ping("pong");'); // eval 
+$r=eval('return ping("pong");'); // eval 2
+
+$fnname='ping';
+$r=$fnname("pong"); // dynamic_function (calling a function using a variable)
+```
+
+| no_eval              | eval                | eval2           | dynamic_function    |
+| :------------------- | :------------------ | :-------------- | :------------------ |
+| 0.003139972686767578 | 0.14499497413635254 | 0.1302490234375 | 0.00487518310546875 |
+
+**Conclusion**: **Eval** is considerably slow and it should be avoided if possible
+
+
+

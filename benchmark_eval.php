@@ -1,5 +1,5 @@
 <?php
-//declare(strict_types=1);
+declare(strict_types=1);
 /** @noinspection AutoloadingIssuesInspection */
 
 
@@ -7,67 +7,48 @@ $numbers = range(0, 1000);
 
 include "Collection.php";
 
-$instances=50000;
+$instances=100000;
 
 $exist=true;
 
-class DummyClass {
+function ping($pong) {
+    return $pong;
 }
-
-/**
- * @param DummyClass $arg1
- * @param DummyClass $arg2
- *
- * @return DummyClass
- */
-function php5($arg1,$arg2){
-    return new DummyClass();
-}
-function php7(DummyClass $arg1,DummyClass $arg2): DummyClass {
-    return new DummyClass();
-}
-function php5int($arg1,$arg2) {
-    return $arg1+$arg2;
-}
-
-function php7int(int $arg1,int $arg2) : int {
-
-    return $arg1+$arg2;
-}
-
-
-
 
 // **********************************************************************************
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
-    $r=php5(new DummyClass(),new DummyClass());
+    $r=ping("pong");
 }
 $t2=microtime(true);
-$table['php5']=$t2-$t1;
-
+$table['no_eval']=$t2-$t1;
 // **********************************************************************************
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
-    $r=php7(new DummyClass(),new DummyClass());
+    eval('$r=ping("pong");');
 }
+// note: $r=eval('ping("pong");'); return null
+// note: $r=eval('return ping("pong");'); return 'pong'
 $t2=microtime(true);
-$table['php7']=$t2-$t1;
-
+$table['eval']=$t2-$t1;
 // **********************************************************************************
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
-    $r=php5int(20,"30");
+    $r=eval('return ping("pong");');
 }
+// note: $r=eval('ping("pong");'); return null
+// note: $r=eval('return ping("pong");'); return 'pong'
 $t2=microtime(true);
-$table['php5int']=$t2-$t1;
+$table['eval2']=$t2-$t1;
+
 
 // **********************************************************************************
 $t1=microtime(true);
+$fnname='ping';
 for($i=0;$i<$instances;$i++) {
-    $r=php7int(20,"30");
+    $r=$fnname("pong");
 }
 $t2=microtime(true);
-$table['php7int']=$t2-$t1;
+$table['dynamic_function']=$t2-$t1;
 
 echo \mapache_commons\Collection::generateTable($table);
