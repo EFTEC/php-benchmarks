@@ -3,6 +3,7 @@ declare(strict_types=1);
 /** @noinspection AutoloadingIssuesInspection */
 
 
+
 $numbers = range(0, 1000);
 
 include "Collection.php";
@@ -13,29 +14,33 @@ $exist=true;
 
 $array1=['repeated'=>'abc','b'=>'bcd','c'=>'def',20,30,40];
 $array2=['repeated'=>'abc','d'=>'abc2','e'=>'bcd2','f'=>'def2',50,60,70];
+$noarray=20;
 
-
 // **********************************************************************************
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
-    $r=array_merge($array1,$array2);
+    $r=@count($array1);
+    $r=@count($noarray);
 }
 $t2=microtime(true);
-$table['array_merge']=$t2-$t1;
+$table['count']=$t2-$t1;
 // **********************************************************************************
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
-    $r=array_replace($array1,$array2);
+    $r=is_array($array1)? count($array1) : null;
+    $r=is_array($noarray)? count($noarray) : null;
 }
 $t2=microtime(true);
-$table['array_replace']=$t2-$t1;
+$table['is_array count']=$t2-$t1;
 // **********************************************************************************
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
-    $r= $array1 + $array2;
+    is_array($array1) and $r=count($array1);
+    is_array($noarray) and $r=count($noarray);
 }
 $t2=microtime(true);
-$table['plus']=$t2-$t1;
+$table['is_array count 2']=$t2-$t1;
+// **********************************************************************************
 
 
 echo \mapache_commons\Collection::generateTable($table);

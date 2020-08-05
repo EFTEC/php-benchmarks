@@ -276,14 +276,12 @@ $r= $var ?? null; // nullcol php >7.0
 $r= @$var ? $exist : null; // ternary
 $r=isset($var) ?? $var; // issetnull7 php>7.0
 $r=isset($var) ? $var : null; // issetnull5 php>7.0
-!isset($var) and $var=true; // hacky but it works (however it doesn't assigns value)
+!isset($var) and $var=null; // hacky but it works (however it doesn't assigns value if the value does not exists)
 ```
 
-
-
-| isset                  | at                    | nullcol                | ternary               | issetnull7             | issetnull5            |
-| :--------------------- | :-------------------- | :--------------------- | :-------------------- | :--------------------- | --------------------- |
-| 0.00011086463928222656 | 0.0017931461334228516 | 0.00010204315185546875 | 0.0019218921661376953 | 0.00012803077697753906 | 0.0001201629638671875 |
+| isset               | at                 | nullcol            | ternary             | issetnull7           | issetnull5          | hacky                |
+| :------------------ | :----------------- | :----------------- | :------------------ | :------------------- | :------------------ | :------------------- |
+| 0.01783585548400879 | 0.3733489513397217 | 0.0551450252532959 | 0.38265109062194824 | 0.024428129196166992 | 0.02412700653076172 | 0.014414072036743164 |
 
 Smaller is better.
 
@@ -344,5 +342,21 @@ $r=$fnname("pong"); // dynamic_function (calling a function using a variable)
 
 **Conclusion**: **Eval** is considerably slow and it should be avoided if possible
 
+## benchmark count vs is_array_count
+
+
+[benchmark_count_isarray](benchmark_count_isarray.php)
+
+```php
+$r=@count($array1);
+$r=is_array($array1)? count($array1) : null;
+is_array($noarray) and $r=count($noarray);
+```
+
+| count               | is_array count       | is_array count 2      |
+| :------------------ | :------------------- | :-------------------- |
+| 0.05631399154663086 | 0.003616809844970703 | 0.0020818710327148438 |
+
+**Conclusion**: @ is consistently bad in an order of magnitude. We could gain a bit of performance using a logic operator (it only assigns the value if the value is an array)
 
 

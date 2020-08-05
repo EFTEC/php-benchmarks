@@ -1,6 +1,7 @@
 <?php
 $dummy=30;
 
+
 //!isset($dummy) && $dummy='ok';
 //var_dump($dummy);
 //die(1);
@@ -9,11 +10,12 @@ $numbers = range(0, 1000);
 
 include "Collection.php";
 
-$instances=5000;
+$instances=1000000;
 
 $exist=true;
 
 // **********************************************************************************
+unset($noexist);
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
     $r=isset($exist);
@@ -23,6 +25,7 @@ $t2=microtime(true);
 $table['isset']=$t2-$t1;
 
 // **********************************************************************************
+unset($noexist);
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
     $r=@$exist;
@@ -32,6 +35,7 @@ $t2=microtime(true);
 $table['at']=$t2-$t1;
 
 // **********************************************************************************
+unset($noexist);
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
     $r= $exist ?? null;
@@ -41,6 +45,7 @@ $t2=microtime(true);
 $table['nullcol']=$t2-$t1;
 
 // **********************************************************************************
+unset($noexist);
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
     $r= @$exist ? $exist : null;
@@ -51,6 +56,7 @@ $table['ternary']=$t2-$t1;
 
 
 // **********************************************************************************
+unset($noexist);
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
     $r= isset($exist) ?? null;
@@ -60,6 +66,7 @@ $t2=microtime(true);
 $table['issetnull7']=$t2-$t1;
 
 // **********************************************************************************
+unset($noexist);
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
     $r= isset($exist) ? $exist : null;
@@ -69,10 +76,11 @@ $t2=microtime(true);
 $table['issetnull5']=$t2-$t1;
 
 // **********************************************************************************
+unset($noexist);
 $t1=microtime(true);
 for($i=0;$i<$instances;$i++) {
-    !isset($exist) and $exist=true;
-    !isset($noexist) and $noexist=false;
+    !isset($exist) and $exist=null;
+    !isset($noexist) and $noexist=null;
 }
 $t2=microtime(true);
 $table['hacky']=$t2-$t1;
