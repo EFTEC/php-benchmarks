@@ -255,11 +255,18 @@ We also tested to call a function and it is way fast than getEnv()
 
 It tests the performance between **foreach** and **array_map**
 
-### Result (less is better)
+### Result 7.x (less is better) 
 
 | foreach                       | array_map        | array_map (static) | array_map (calling a function) |
 | :---------------------------- | :--------------- | :----------------- | :----------------------------- |
 | **0.10213899612427** (better) | 0.18259811401367 | 0.18230390548706   | 0.17731499671936               |
+
+### Result 8.x (less is better)
+
+| foreach                      | array_map           | array_map (static)  | array_map (calling a function) |
+| :--------------------------- | :------------------ | :------------------ | :----------------------------- |
+| 0.12356901168823242 (better) | 0.19595623016357422 | 0.19472408294677734 | 0.19141697883605957            |
+
 
 Conclusion: Foreach is still faster.   Between array_map and array_map (static), there is not a big difference. And using array_map with a function is slightly fast.
 
@@ -342,8 +349,7 @@ $r=$fnname("pong"); // dynamic_function (calling a function using a variable)
 
 **Conclusion**: **Eval** is considerably slow and it should be avoided if possible
 
-## benchmark count vs is_array_count
-
+## benchmark count vs is_array and count
 
 [benchmark_count_isarray](benchmark_count_isarray.php)
 
@@ -353,10 +359,30 @@ $r=is_array($array1)? count($array1) : null;
 is_array($noarray) and $r=count($noarray);
 ```
 
-| count               | is_array count       | is_array count 2      |
-| :------------------ | :------------------- | :-------------------- |
-| 0.05631399154663086 | 0.003616809844970703 | 0.0020818710327148438 |
+| count               | is_array count       | is_array count 2                   |
+| :------------------ | :------------------- | :--------------------------------- |
+| 0.05631399154663086 | 0.003616809844970703 | **0.0020818710327148438** (better) |
 
 **Conclusion**: @ is consistently bad in an order of magnitude. We could gain a bit of performance using a logic operator (it only assigns the value if the value is an array)
 
+>  Note: @count($array) crashes in PHP 8 when $array is not an object
+
+
+
+## benchmark is_array vs is_countable
+
+[benchmark_is_array_countable.php](benchmark_is_array_countable.php)
+
+```
+$r=is_countable($array1);
+$r=is_array($array1);
+$r=gettype($noarray);
+$r=get_debug_type($noarray);
+```
+
+| is_countable (PHP 7.x) | is_array count        | gettype              | get_debug_type (PHP 8) |
+| :--------------------- | :-------------------- | :------------------- | :--------------------- |
+| 0.0044329166412353516  | 0.0022399425506591797 | 0.002468109130859375 | 0.004589080810546875   |
+
+**Conclusion**: is_countable is surprisingly bad.  Also, get_debug_type() is slower than gettype()
 
