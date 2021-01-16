@@ -429,3 +429,21 @@ returns true. So they are not exactly the same.
 | 0.00333404541015625 | 0.0028688907623291016 |
 
 **Conclusion**: isset() is fastest by usually an 40-80%.
+
+## str_contains vs str_pos
+
+[benchmark_str_contains_vs_strpos.php](benchmark_str_contains_vs_strpos.php)
+
+```php
+$r=str_contains($text,'mary');
+$r=strpos($text,'mary');
+```
+
+### Result (smaller is better)
+
+| str_contains        | strpos              |
+| :------------------ | :------------------ |
+| 0.09099698066711426 | 0.09030508995056152 |
+
+They give the same performance but conceptually (if you want to see if a string exists inside other) **str_contains** is better because it always returns a boolean while **strpos** returns a int or a false.
+
