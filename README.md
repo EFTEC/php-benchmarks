@@ -5,6 +5,7 @@ It is a collection of PHP benchmarks.   Those benchmarks are aimed to be execute
 
 It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea).  
 
+
 - [PHP benchmarks](#php-benchmarks)
   * [Benchmark 1, Reference vs No Reference](#benchmark-1--reference-vs-no-reference)
     + [Result (smaller is better)](#result--smaller-is-better-)
@@ -18,13 +19,17 @@ It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it 
     + [Result 7.x (less is better)](#result-7x--less-is-better-)
     + [Result 8.x (less is better)](#result-8x--less-is-better-)
   * [isset vs @ at](#isset-vs---at)
+    + [Result (smaller is better)](#result--smaller-is-better--1)
   * [Type hinting](#type-hinting)
+    + [Result (smaller is better)](#result--smaller-is-better--2)
   * [Benchmark eval](#benchmark-eval)
+    + [Result (smaller is better)](#result--smaller-is-better--3)
   * [benchmark count vs is_array and count](#benchmark-count-vs-is-array-and-count)
+    + [Result (smaller is better)](#result--smaller-is-better--4)
   * [benchmark is_array vs is_countable](#benchmark-is-array-vs-is-countable)
+    + [Result (smaller is better)](#result--smaller-is-better--5)
   * [array_key_exists vs isset](#array-key-exists-vs-isset)
-
-
+    + [Result (smaller is better)](#result--smaller-is-better--6)
 
 
 
@@ -295,6 +300,8 @@ $r=isset($var) ? $var : null; // issetnull5 php>7.0
 !isset($var) and $var=null; // hacky but it works (however it doesn't assigns value if the value does not exists)
 ```
 
+### Result (smaller is better)
+
 | isset               | at                 | nullcol            | ternary             | issetnull7           | issetnull5          | hacky                |
 | :------------------ | :----------------- | :----------------- | :------------------ | :------------------- | :------------------ | :------------------- |
 | 0.01783585548400879 | 0.3733489513397217 | 0.0551450252532959 | 0.38265109062194824 | 0.024428129196166992 | 0.02412700653076172 | 0.014414072036743164 |
@@ -326,7 +333,7 @@ function php7(DummyClass $arg1,DummyClass $arg2): DummyClass {
 }
 ```
 
-
+### Result (smaller is better)
 
 | php5                  | php7                  |
 | :-------------------- | :-------------------- |
@@ -352,6 +359,8 @@ $fnname='ping';
 $r=$fnname("pong"); // dynamic_function (calling a function using a variable)
 ```
 
+### Result (smaller is better)
+
 | no_eval              | eval                | eval2           | dynamic_function    |
 | :------------------- | :------------------ | :-------------- | :------------------ |
 | 0.003139972686767578 | 0.14499497413635254 | 0.1302490234375 | 0.00487518310546875 |
@@ -367,6 +376,8 @@ $r=@count($array1);
 $r=is_array($array1)? count($array1) : null;
 is_array($noarray) and $r=count($noarray);
 ```
+
+### Result (smaller is better)
 
 | count               | is_array count       | is_array count 2                   |
 | :------------------ | :------------------- | :--------------------------------- |
@@ -389,6 +400,8 @@ $r=gettype($noarray);
 $r=get_debug_type($noarray);
 ```
 
+### Result (smaller is better)
+
 | is_countable (PHP 7.x) | is_array count        | gettype              | get_debug_type (PHP 8) |
 | :--------------------- | :-------------------- | :------------------- | :--------------------- |
 | 0.0044329166412353516  | 0.0022399425506591797 | 0.002468109130859375 | 0.004589080810546875   |
@@ -408,6 +421,8 @@ $r=isset($array1['repeated']);
 
 Note: if the key exists **$array1['repeated']** but the value is null, then isset() returns false while array_key_exists 
 returns true. So they are not exactly the same.
+
+### Result (smaller is better)
 
 | array_key_exists    | isset                 |
 | :------------------ | :-------------------- |
