@@ -15,7 +15,16 @@ It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it 
   * [DEFINE / CONST / ENV](#define---const---env)
     + [Result (less is better)](#result--less-is-better--1)
   * [array_map vs foreach](#array-map-vs-foreach)
-    + [Result (less is better)](#result--less-is-better--2)
+    + [Result 7.x (less is better)](#result-7x--less-is-better-)
+    + [Result 8.x (less is better)](#result-8x--less-is-better-)
+  * [isset vs @ at](#isset-vs---at)
+  * [Type hinting](#type-hinting)
+  * [Benchmark eval](#benchmark-eval)
+  * [benchmark count vs is_array and count](#benchmark-count-vs-is-array-and-count)
+  * [benchmark is_array vs is_countable](#benchmark-is-array-vs-is-countable)
+  * [array_key_exists vs isset](#array-key-exists-vs-isset)
+
+
 
 
 
@@ -397,7 +406,8 @@ $r=isset($array1['repeated']);
 
 [benchmark_array_key_exists_vs_isset.php]([benchmark_array_key_exists_vs_isset.php)
 
-Note: if the key exists **$array1['repeated']** but it is null, then isset() returns false while array_key_exists returns true. So they are not exactly the sames.
+Note: if the key exists **$array1['repeated']** but the value is null, then isset() returns false while array_key_exists 
+returns true. So they are not exactly the same.
 
 | array_key_exists    | isset                 |
 | :------------------ | :-------------------- |
