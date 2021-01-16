@@ -43,11 +43,11 @@ function noReference($array) {
 
 ### Result (smaller is better)
 
-| Reference        | No Reference     | Speed of Reference % |
-| :--------------- | :--------------- | :------------------- |
-| 0.06107497215271 | 0.10248017311096 | 40.403133309913      |
+| Reference                     | No Reference     | Speed of Reference % |
+| :---------------------------- | :--------------- | :------------------- |
+| **0.06107497215271** (faster) | 0.10248017311096 | 40.403133309913      |
 
-
+Conclusion: Using a reference argument is faster than using an argument by value
 
 ## Bechmark 2 Hash speed
 
@@ -386,3 +386,21 @@ $r=get_debug_type($noarray);
 
 **Conclusion**: is_countable is surprisingly bad.  Also, get_debug_type() is slower than gettype()
 
+
+
+## array_key_exists vs isset
+
+```php
+$r=array_key_exists('repeated',$array1);
+$r=isset($array1['repeated']);
+```
+
+[benchmark_array_key_exists_vs_isset.php]([benchmark_array_key_exists_vs_isset.php)
+
+Note: if the key exists **$array1['repeated']** but it is null, then isset() returns false while array_key_exists returns true. So they are not exactly the sames.
+
+| array_key_exists    | isset                 |
+| :------------------ | :-------------------- |
+| 0.00333404541015625 | 0.0028688907623291016 |
+
+**Conclusion**: isset() is fastest by usually an 40-80%.
