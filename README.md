@@ -451,7 +451,7 @@ They give the same performance but conceptually (if you want to see if a string 
 
 [benchmark_file_exists_vs_is_file.php](benchmark_file_exists_vs_is_file.php)
 
-This benchmarks measures the speed of both functions where the file exists and where the file does not exist.
+This benchmark measures the speed of both functions where the file exists and where the file does not exist.
 
 ### Result (smaller is better)
 
