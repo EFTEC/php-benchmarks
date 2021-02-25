@@ -447,3 +447,14 @@ $r=strpos($text,'mary');
 
 They give the same performance but conceptually (if you want to see if a string exists inside other) **str_contains** is better because it always returns a boolean while **strpos** returns a int or a false.
 
+## file_exists vs is_file
+
+[benchmark_file_exists_vs_is_file.php](benchmark_file_exists_vs_is_file.php)
+
+This benchmarks measures the speed of both functions where the file exists and where the file does not exist.
+
+| file_exists       | is_file            |
+| :---------------- | :----------------- |
+| 3.451578140258789 | 2.0834150314331055 |
+
+Conclusion: is_file() is faster in almost the double of speed.
