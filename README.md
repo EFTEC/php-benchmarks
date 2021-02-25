@@ -453,8 +453,16 @@ They give the same performance but conceptually (if you want to see if a string 
 
 This benchmarks measures the speed of both functions where the file exists and where the file does not exist.
 
+Windows:
+
 | file_exists       | is_file            |
 | :---------------- | :----------------- |
 | 3.451578140258789 | 2.0834150314331055 |
 
-Conclusion: is_file() is faster in almost the double of speed.
+Linux:
+
+| file_exists     | is_file           |
+| :-------------- | :---------------- |
+| 0.1745491027832 | 0.062805891036987 |
+
+Conclusion: is_file() is faster in almost the double of speed and Linux is faster than Windows.
