@@ -3,37 +3,41 @@ It is a collection of PHP benchmarks.   Those benchmarks are aimed to be execute
 
 
 
-It is tested under PHP 7.4 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea).  
+It is tested under PHP 7.4 / PHP 8.0 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea).  
 
+## Table of contents
 
 - [PHP benchmarks](#php-benchmarks)
-  * [Benchmark 1, Reference vs No Reference](#benchmark-1--reference-vs-no-reference)
-    + [Result (smaller is better)](#result--smaller-is-better-)
-  * [Bechmark 2 Hash speed](#bechmark-2-hash-speed)
-    + [Result (short time is better)](#result--short-time-is-better-)
-  * [JSON vs Serialize](#json-vs-serialize)
-    + [Result (less is better)](#result--less-is-better-)
-  * [DEFINE / CONST / ENV](#define---const---env)
-    + [Result (less is better)](#result--less-is-better--1)
-  * [array_map vs foreach](#array-map-vs-foreach)
-    + [Result 7.x (less is better)](#result-7x--less-is-better-)
-    + [Result 8.x (less is better)](#result-8x--less-is-better-)
-  * [isset vs @ at](#isset-vs---at)
-    + [Result (smaller is better)](#result--smaller-is-better--1)
-  * [Type hinting](#type-hinting)
-    + [Result (smaller is better)](#result--smaller-is-better--2)
-  * [Benchmark eval](#benchmark-eval)
-    + [Result (smaller is better)](#result--smaller-is-better--3)
-  * [benchmark count vs is_array and count](#benchmark-count-vs-is-array-and-count)
-    + [Result (smaller is better)](#result--smaller-is-better--4)
-  * [benchmark is_array vs is_countable](#benchmark-is-array-vs-is-countable)
-    + [Result (smaller is better)](#result--smaller-is-better--5)
-  * [array_key_exists vs isset](#array-key-exists-vs-isset)
-    + [Result (smaller is better)](#result--smaller-is-better--6)
-
-
-
-
+  - [Table of contents](#table-of-contents)
+  - [Benchmark 1, Reference vs No Reference](#benchmark-1-reference-vs-no-reference)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Bechmark 2 Hash speed](#bechmark-2-hash-speed)
+    - [Result (short time is better)](#result-short-time-is-better)
+  - [JSON vs Serialize](#json-vs-serialize)
+    - [Result (less is better)](#result-less-is-better)
+  - [DEFINE / CONST / ENV](#define--const--env)
+    - [Result (less is better)](#result-less-is-better)
+  - [array_map vs foreach](#array_map-vs-foreach)
+    - [Result 7.x (less is better)](#result-7x-less-is-better)
+    - [Result 8.x (less is better)](#result-8x-less-is-better)
+  - [isset vs @ at](#isset-vs--at)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Type hinting](#type-hinting)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Benchmark eval](#benchmark-eval)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Benchmark count vs is_array and count](#benchmark-count-vs-is_array-and-count)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Benchmark is_array vs is_countable](#benchmark-is_array-vs-is_countable)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Benchmark array_key_exists vs isset](#benchmark-array_key_exists-vs-isset)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Benchmark str_contains vs str_pos](#benchmark-str_contains-vs-str_pos)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Benchmark file_exists vs is_file](#benchmark-file_exists-vs-is_file)
+    - [Result (smaller is better)](#result-smaller-is-better)
+  - [Benchmark array_merge vs others](#benchmark-array_merge-vs-others)
+    - [Result (smaller is better)](#result-smaller-is-better)
 
 ## Benchmark 1, Reference vs No Reference
 
@@ -367,7 +371,7 @@ $r=$fnname("pong"); // dynamic_function (calling a function using a variable)
 
 **Conclusion**: **Eval** is considerably slow and it should be avoided if possible
 
-## benchmark count vs is_array and count
+## Benchmark count vs is_array and count
 
 [benchmark_count_isarray](benchmark_count_isarray.php)
 
@@ -389,7 +393,7 @@ is_array($noarray) and $r=count($noarray);
 
 
 
-## benchmark is_array vs is_countable
+## Benchmark is_array vs is_countable
 
 [benchmark_is_array_countable.php](benchmark_is_array_countable.php)
 
@@ -410,7 +414,7 @@ $r=get_debug_type($noarray);
 
 
 
-## array_key_exists vs isset
+## Benchmark array_key_exists vs isset
 
 ```php
 $r=array_key_exists('repeated',$array1);
@@ -430,7 +434,7 @@ returns true. So they are not exactly the same.
 
 **Conclusion**: isset() is fastest by usually an 40-80%.
 
-## str_contains vs str_pos
+## Benchmark str_contains vs str_pos
 
 [benchmark_str_contains_vs_strpos.php](benchmark_str_contains_vs_strpos.php)
 
@@ -445,9 +449,9 @@ $r=strpos($text,'mary');
 | :------------------ | :------------------ |
 | 0.09099698066711426 | 0.09030508995056152 |
 
-They give the same performance but conceptually (if you want to see if a string exists inside other) **str_contains** is better because it always returns a boolean while **strpos** returns a int or a false.
+They give the same performance but conceptually (if you want to see if a string exists inside other) **str_contains** is better because it always returns a boolean while **strpos** returns an **int** or a **false**.
 
-## file_exists vs is_file
+## Benchmark file_exists vs is_file
 
 [benchmark_file_exists_vs_is_file.php](benchmark_file_exists_vs_is_file.php)
 
@@ -468,3 +472,31 @@ Linux:
 | 0.1745491027832 | 0.062805891036987 |
 
 Conclusion: is_file() is faster in almost the double of speed and Linux is faster than Windows.
+
+## Benchmark array_merge vs others
+
+[benchmark_array_merge_vs_plus.php](benchmark_array_merge_vs_plus.php)
+
+We compare array_merge() versus the rest.   We should notice that they could return different results considering if we have duplicates or if the value stored is not indexed. So, they are not always interchangeable.
+
+```php
+  $r=array_merge($array1,$array2); // array merge
+  $r=array_replace($array1,$array2); // array_replay
+  $r= $array1 + $array2; // plus
+  $r= foreachMerge($array1,$array2); // foreach concatenates the two values using a foreach loop
+```
+
+### Result (smaller is better)
+
+| array_merge               | array_replace            | plus                     | foreach                 |
+| :------------------------ | :----------------------- | :----------------------- | :---------------------- |
+| 0.015676021575927734 (12) | 0.019279003143310547 (9) | 0.014889001846313477 (9) | 0.05200004577636719 (9) |
+
+> note: the number between parenthesis indicates the number of elements returned.
+>
+> array_merge(['a'=>'1','b'=>'2',1,2],['a'=>'1','b'=>'2',1,2])  returns the values ['a'=>'1','b'=>'2',1,2,1,2].  **Array_replace**, **plus** and **foreach** does not duplicates the values without indexes.
+
+Conclusion: plus is better than array_replace and it does a similar job.  array_merge generates an acceptable performance (even the arrays has duplicates).  Also, you don't want to create your own merge using **foreach**.
+
+
+
