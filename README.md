@@ -432,7 +432,7 @@ returns true. So they are not exactly the same.
 | :------------------ | :-------------------- |
 | 0.00333404541015625 | 0.0028688907623291016 |
 
-**Conclusion**: isset() is fastest by usually an 40-80%.
+**Conclusion**: isset() is the fastest by usually an 40-80%.
 
 ## Benchmark str_contains vs str_pos
 
