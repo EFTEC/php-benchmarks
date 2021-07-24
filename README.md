@@ -500,3 +500,52 @@ Conclusion: plus is better than array_replace and it does a similar job.  array_
 
 
 
+## Benchmark array versus object
+
+This benchmarks tests the next functionalities:
+
+* Create an entity.
+* Read a simple value
+* Adds to the list (the list is created every round)
+
+### Result (smaller is better)
+
+```php
+$array_numeric=[$hello,$second,$third];
+
+$array_not_numeric=['hello'=>$hello,'second'=>$second,'third'=>$third];
+
+$object_constructor=DummyClass('world',0,20.3);
+
+$object_no_constructor=new DummyClass2();
+$object_no_constructor->hello='world';
+$object_no_constructor->second=0;
+$object_no_constructor->third=20.3;
+```
+
+What is a factory?  A factory is a function used for create an entity (in this case, an array).
+
+what is a constructor? A constructor is part of a class and it is used to initialize the instance of the object.
+
+In seconds.
+
+| array numeric no factory | array no factory    | array numeric factory | array factory       | object constructor  | object no constructor | object no constructor setter/getter | object no constructor setter/getter (magic) | object no constructor stdClass |
+| :----------------------- | :------------------ | :-------------------- | :------------------ | :------------------ | :-------------------- | :---------------------------------- | :------------------------------------------ | :----------------------------- |
+| 0.038275957107543945     | 0.04024696350097656 | 0.12892484664916992   | 0.15126800537109375 | 0.12696218490600586 | 0.08770990371704102   | 0.21163702011108398                 | 0.3990211486816406                          | 0.13244986534118652            |
+
+### Result in percentage compared with the smaller result.
+
+| array numeric no factory | array no factory | array numeric factory | array factory | object constructor | object no constructor | object no constructor setter/getter | object no constructor setter/getter (magic) | object no constructor stdClass |
+| :----------------------- | :--------------- | :-------------------- | :------------ | :----------------- | :-------------------- | :---------------------------------- | :------------------------------------------ | :----------------------------- |
+| 0%                       | 5.15%            | 236.83%               | 295.2%        | 231.7%             | 129.15%               | 452.92%                             | 942.49%                                     | 246.04%                        |
+
+Conclusion:
+
+* The difference between an array numeric and an associative array is a mere 5%, so you can say that they are the same.
+* The use of an object is +100% slower but it is still acceptable in most conditions (aka it uses the double of time).
+* The call to a method or the use of constructor increases the value considerably. **Also, its better to use an object/constructor than an array/factory.**  Why? I don't know.
+* The use of setter/getters impacts the performance considerably.  If you can then you should avoid that.
+* The use of magic setters and getters is horrible (almost 10 times slower).   Is it the reason why Laravel is slow?
+  * Also, the setters and getters are vanilla, they don't validate if the field exists of any other validation.
+* And the use of a **stdClass** (anonymous class) is also bad but not as bad as to use setter and getters.
+
