@@ -83,11 +83,13 @@ $tablesize['packer->pack (msgpack)'] = strlen($ser);
 $tablecomp['packer->pack (msgpack)'] = ($b===$input)?'yes':'no';
 
 
-echo "<h2>Serialize: (in seconds less is better)</h2>";
+echo "<h3>Serialize: (in seconds less is better)</h3>";
 echo \mapache_commons\Collection::generateTable($table,true,true);
-echo "<h2>De-serialize: (in seconds less is better)</h2>";
+echo "<h3>De-serialize: (in seconds less is better)</h3>";
 echo \mapache_commons\Collection::generateTable($tableunser,true,true);
-echo "<h2>Size: (in bytes less is better)</h2>";
+echo "<h3>Size: (in bytes less is better)</h3>";
 echo \mapache_commons\Collection::generateTable($tablesize,true,true);
-echo "<h2>Input is equals to output: (no means error)</h2>";
+echo "<h3>Input is equals to output: (no means error)</h3>";
 echo \mapache_commons\Collection::generateTable($tablecomp,true);
+echo "<br>";
+echo "<br>";

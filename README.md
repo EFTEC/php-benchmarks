@@ -3,6 +3,12 @@ It is a collection of PHP benchmarks.   Those benchmarks are aimed to be execute
 
 
 
+## Awards
+
+[PHP Benchmarks: Evaluate the speed of PHP running different tasks - PHP Classes](https://www.phpclasses.org/package/11893-PHP-Evaluate-the-speed-of-PHP-running-different-tasks.html)
+
+
+
 It is tested under PHP 7.4 / PHP 8.0 + 64bits + Windows 64 bits but you could download it and test it by yourself (it is the idea).  
 
 ## Table of contents
@@ -613,12 +619,12 @@ Conclusion: the constant is a bit slow in practically every case.  The use of a 
 
 https://github.com/EFTEC/php-benchmarks/blob/master/benchmark_serialization.php
 
-We test the serialization using different methods.
+We benchmark the serialization using different methods.
 
 * serialize (PHP serialization function)
-* igbinary
+* igbinary (pecl)
 * json
-* msgpack
+* msgpack (pecl)
 
 It is the data that was serialized
 
