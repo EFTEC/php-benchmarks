@@ -498,17 +498,13 @@ We compare array_merge() versus the rest.   We should notice that they could ret
 
 Conclusion: plus is better than array_replace and it does a similar job.  array_merge generates an acceptable performance (even the arrays has duplicates).  Also, you don't want to create your own merge using **foreach**.
 
-
-
 ## Benchmark array versus object
 
-This benchmarks tests the next functionalities:
+This benchmark tests the next functionalities:
 
-* Create an entity.
-* Read a simple value
-* Adds to the list (the list is created every round)
-
-### Result (smaller is better)
+* Create a variable.
+* Then, it reads a simple value
+* And it adds to the list (the list is created every round)
 
 ```php
 $array_numeric=[$hello,$second,$third];
@@ -523,11 +519,13 @@ $object_no_constructor->second=0;
 $object_no_constructor->third=20.3;
 ```
 
-What is a factory?  A factory is a function used for create an entity (in this case, an array).
+What is a factory?  A factory is a function used for creating an entity (in this case, an array).
 
-what is a constructor? A constructor is part of a class and it is used to initialize the instance of the object.
+what is a constructor? A constructor is part of a class and is used to initialize the instance of the object.
 
-In seconds.
+### Result (smaller is better)
+
+It is the result of the benchmarks in seconds
 
 | array numeric no factory | array no factory    | array numeric factory | array factory       | object constructor  | object no constructor | object no constructor setter/getter | object no constructor setter/getter (magic) | object no constructor stdClass |
 | :----------------------- | :------------------ | :-------------------- | :------------------ | :------------------ | :-------------------- | :---------------------------------- | :------------------------------------------ | :----------------------------- |
@@ -543,9 +541,164 @@ Conclusion:
 
 * The difference between an array numeric and an associative array is a mere 5%, so you can say that they are the same.
 * The use of an object is +100% slower but it is still acceptable in most conditions (aka it uses the double of time).
-* The call to a method or the use of constructor increases the value considerably. **Also, its better to use an object/constructor than an array/factory.**  Why? I don't know.
+* The call to a method or the use of a constructor increases the value considerably. **Also, it's better to use an object/constructor than an array/factory.**  Why? I don't know.
 * The use of setter/getters impacts the performance considerably.  If you can then you should avoid that.
 * The use of magic setters and getters is horrible (almost 10 times slower).   Is it the reason why Laravel is slow?
   * Also, the setters and getters are vanilla, they don't validate if the field exists of any other validation.
 * And the use of a **stdClass** (anonymous class) is also bad but not as bad as to use setter and getters.
+
+ps: The test ran 1 million times and the difference is smaller than 0.3 seconds, so is it important?
+
+Let's say we have 100 concurrent users (not a small number but not impossible), and we are processing and returning a list with 1000 values. It is 100x1000 = 100'000 objects.  So, if we consider 100'000 objects, then the difference is less than 0.03 seconds in the worst case. However, our systems process more than a single operation, so if we are showing a list of objects, then we also validating, showing other values, validating, reading from the database and storing into the memory and returning to the customer via a web or serialized, so this value could considerable and the use of the CPU is on-top of other processes.   It is not a big deal for a small project, but it is important for a big project.
+
+tl/dr
+
+```php
+$customer[0]='john'; // faster but it is hard to understand
+$customer['name']='john'; // almost as fast as the first one but it is clear to understand (it also uses more memory)
+$customer->name='john'; // (where $customer is an object of the class Customer) slower but it still acceptable.
+$customer->name='john'; // (where $customer is an object of the class stdClass) the double of slower than to use a class. 
+$customer=new Customer('john'); // (constructor) even slower but is still acceptable;
+$customer=factory('john'); // (where factory is an array that returns an array). Slower than the use of constructor.
+$customer->setName('john'); // bad performance
+$customer->name='john'; // (where the class uses a magic method) awful performance, avoid this one.
+```
+
+https://github.com/EFTEC/php-benchmarks/blob/master/benchmark_array_vs_object.php
+
+## Echo vs Concat vs Implode
+
+Which is faster for multiples concatenation?
+
+| echo                | concat              | implode             |
+| :------------------ | :------------------ | :------------------ |
+| 0.00058293342590332 | 0.00057601928710938 | 0.00058507919311523 |
+
+In conclusion, all of them are pretty similar.
+
+
+
+https://github.com/EFTEC/php-benchmarks/blob/master/benchmark_echo_vs_strings.php
+
+## Constant vs variable vs  literal
+
+We compare the use of a constant versus a variable and a literal. All of them stores a string.
+
+The literal is defined for each cycle.
+
+```php
+const HELLO = 'HELLO WORLD';
+$variable = 'HELL WORLD';
+'HELLO WORLD'
+```
+
+
+
+| constant          | variable          | literal           |
+| :---------------- | :---------------- | :---------------- |
+| 0.047255992889404 | 0.041103839874268 | 0.041267156600952 |
+| 0.047415971755981 | 0.040828943252563 | 0.041354894638062 |
+| 0.047232151031494 | 0.041209936141968 | 0.041146993637085 |
+| 0.047588109970093 | 0.040886878967285 | 0.041790962219238 |
+| 0.047214031219482 | 0.041198968887329 | 0.042134046554565 |
+| 0.04762601852417  | 0.041079998016357 | 0.041344881057739 |
+| 0.047240018844604 | 0.04153299331665  | 0.041368007659912 |
+| 0.04719614982605  | 0.042517900466919 | 0.041674137115479 |
+| 0.072301149368286 | 0.070401906967163 | 0.050674915313721 |
+| 0.049120903015137 | 0.041906118392944 | 0.041185140609741 |
+
+Conclusion: the constant is a bit slow in practically every case.  The use of a variable or a literal is the same, even when the literal is apparently created many times.
+
+## Serializations
+
+https://github.com/EFTEC/php-benchmarks/blob/master/benchmark_serialization.php
+
+We test the serialization using different methods.
+
+* serialize (PHP serialization function)
+* igbinary
+* json
+* msgpack
+
+It is the data that was serialized
+
+```php
+$input = array();
+for ($i = 0; $i < 1000; $i++) {
+    $input["k-$i"] = [$i];
+    $input["k-$i"]['k1'] =['a','b','c'];
+    $input["k-$i"]['k1']['k2'] =['a','b',10,20,30,true];
+}
+```
+
+It is complex but not really complex. It's not a huge array, just 1000 arrays with multiples dimensions (the equivalent to show a table with 1000 data and some relations)
+
+
+
+### Serialize: (in seconds less is better)
+
+| serialize            | igbinary_serialize | json_encode          | packer->pack (msgpack) |
+| :------------------- | :----------------- | :------------------- | :--------------------- |
+| 0.3174231052 154.67% | 0.2052299976 100%  | 0.2650880814 129.17% | 0.2757101059 134.34%   |
+
+Conclusion: **igbinary** is a bit faster to serialize but the different is not as big.
+
+### De-serialize: (in seconds less is better)
+
+| unserialize          | igbinary_unserialize | json_decode      | packer->unpack (msgpack) |
+| :------------------- | :------------------- | :--------------- | :----------------------- |
+| 0.6460649967 228.28% | 0.2830090523 100%    | 1.816905975 642% | 0.6301090717 222.65%     |
+
+Conclusion: **igbinary** is a bit faster to unserialize
+
+### Size: (in bytes less is better)
+
+| serialize      | igbinary_serialize | json_encode   | packer->pack (msgpack) |
+| :------------- | :----------------- | :------------ | :--------------------- |
+| 144789 430.05% | 33668 100%         | 72781 216.17% | 34509 102.5%           |
+
+**Conclusion: igbinary hands down (at least in my test machine)**
+
+Iwill try it again but with a different input value (without nested values)
+
+```php
+$input = array();
+for ($i = 0; $i < 1000; $i++) {
+    $input["k-$i"] = ["k-$i"];
+}
+```
+
+
+
+### Serialize: (in seconds less is better)
+
+| serialize            | igbinary_serialize   | json_encode          | packer->pack (msgpack) |
+| :------------------- | :------------------- | :------------------- | :--------------------- |
+| 0.05781698227 102.6% | 0.1744749546 309.63% | 0.05888605118 104.5% | 0.05634999275 100%     |
+
+### De-serialize: (in seconds less is better)
+
+| unserialize         | igbinary_unserialize | json_decode          | packer->unpack (msgpack) |
+| :------------------ | :------------------- | :------------------- | :----------------------- |
+| 0.1529650688 165.5% | 0.09242415428 100%   | 0.2922010422 316.15% | 0.1266789436 137.06%     |
+
+### Size: (in bytes less is better)
+
+| serialize     | igbinary_serialize | json_encode  | packer->pack (msgpack) |
+| :------------ | :----------------- | :----------- | :--------------------- |
+| 33789 264.33% | 13641 106.71%      | 17781 139.1% | 12783 100%             |
+
+### Input is equals to output: (no means error)
+
+| unserialize | igbinary_unserialize | json_decode | packer->pack (msgpack) |
+| :---------- | :------------------- | :---------- | :--------------------- |
+| yes         | yes                  | yes         | yes                    |
+
+**Conclusion: msgpacker is faster serializing and in size, while igbinary is faster unserializing.**
+
+
+
+
+
+
 

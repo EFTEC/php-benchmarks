@@ -94,7 +94,10 @@ class Collection {
      * @return string
      * @see https://stackoverflow.com/questions/4746079/how-to-create-a-html-table-from-a-php-array
      */
-    public static function generateTable($array, $css = true) {
+    public static function generateTable($array, $css = true,$percentage=false) {
+        if($percentage) {
+            $min=min($array);
+        }
         if (!isset($array[0])) {
             $tmp = $array;
             $array = array();
@@ -140,7 +143,13 @@ class Collection {
                 if (is_array($value2)) {
                     $html .= '<td >' . self::generateTable($value2) . '</td>';
                 } else {
-                    $html .= '<td >' . htmlspecialchars($value2) . '</td>';
+                    if($percentage) {
+                        $p=round($value2/$min*100 ,2).'%';
+                        $html .= '<td >' . htmlspecialchars($value2) .' '.$p.'</td>';
+                    } else {
+                        $html .= '<td >' . htmlspecialchars($value2) .'</td>';
+                    }
+
                 }
 
             }
